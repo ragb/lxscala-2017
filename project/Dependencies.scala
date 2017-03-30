@@ -8,6 +8,7 @@ object Dependencies {
   lazy val http4sDsl = "org.http4s" %% "http4s-dsl" % http4sVersion changing()
   lazy val fs2core = "co.fs2" %% "fs2-core" % fs2version
   lazy val jawnFs2 = "org.http4s" %% "jawn-fs2" % jawnFs2version
+  lazy val fs2Kafka = "co.enear" %% "fs2-kafka" % fs2KafkaVersion
 
   // Circe
   lazy val Seq(circeCore, circeParser, circeGeneric) = Seq("circe-core", "circe-parser", "circe-generic") map(lib => "io.circe" %% lib % circeVersion)
@@ -29,8 +30,10 @@ lazy val macroParadise = compilerPlugin("org.scalamacros" % "paradise" % "2.1.0"
   val jawnFs2version = "0.10.1"
   val specs2Version = "3.8.9"
   val pureconfigVersion = "0.6.0"
-val grafterVersion = "1.4.8"
+  val grafterVersion = "1.4.8"
+  val fs2KafkaVersion = "0.0.1"
 
 // Resolvers
-val rossabackerBintray = "bintray/rossabaker" at "http://dl.bintray.com/rossabaker/maven"
+  val rossabackerBintray = "bintray/rossabaker" at "http://dl.bintray.com/rossabaker/maven"
+  val ragbBintray = Resolver.bintrayRepo("batista", "maven")
 }

@@ -8,7 +8,10 @@ val commonSettings =  Seq(
   scalaVersion in ThisBuild := "2.11.8",
   cancelable in Global := true,
       version      := "0.1.0-SNAPSHOT",
-    resolvers += Resolver.sonatypeRepo("snapshots"),
+  resolvers ++= Seq(
+    Resolver.sonatypeRepo("snapshots"),
+    ragbBintray
+  ),
     libraryDependencies ++= Seq(
       specs2Core % Test
     ),
