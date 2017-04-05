@@ -1,4 +1,5 @@
 import Dependencies._
+import Slides._
 
 lazy val root = (project in file(".")).
   aggregate(twitterProducer, common)
@@ -10,6 +11,7 @@ val commonSettings =  Seq(
       version      := "0.1.0-SNAPSHOT",
   resolvers ++= Seq(
     Resolver.sonatypeRepo("snapshots"),
+    rossabackerBintray,
     ragbBintray
   ),
     libraryDependencies ++= Seq(
@@ -60,3 +62,13 @@ lazy val twitterProducer = (project in file("twitter-producer")).
     )
   ).
   dependsOn(common)
+
+lazy val slides = (project in file("slides")).
+  settings(commonSettings:_*).
+  settings(tutSettings:_*).
+  settings(slidesSettings:_*).
+  settings(
+    slidesSourceFile := tutTargetDirectory.value / "slides.md",
+    slidesHtml := (slidesHtml.dependsOn(tut)).value
+  ).
+dependsOn(common)
