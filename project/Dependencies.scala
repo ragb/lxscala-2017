@@ -18,6 +18,9 @@ object Dependencies {
 // testing
   lazy val specs2Core = "org.specs2" %% "specs2-core" % specs2Version
 
+  // webjars
+  lazy val revealjs = "org.webjars.bower" % "reveal.js" % revealjsVersion
+
 // compiler plugins
 lazy val macroParadise = compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
@@ -32,6 +35,7 @@ lazy val macroParadise = compilerPlugin("org.scalamacros" % "paradise" % "2.1.0"
   val pureconfigVersion = "0.6.0"
   val grafterVersion = "1.4.8"
   val fs2KafkaVersion = "0.0.1"
+  val revealjsVersion = "3.1.0"
 
 // Resolvers
   val rossabackerBintray = "bintray/rossabaker" at "http://dl.bintray.com/rossabaker/maven"

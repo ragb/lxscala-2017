@@ -1,4 +1,4 @@
-title: LXSCala
+% LXSCala
 
 
 ## Slide1
@@ -6,5 +6,4 @@ title: LXSCala
 
 ```tut
 1 + 1
-
 ````

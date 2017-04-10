@@ -2,12 +2,12 @@ import Dependencies._
 import Slides._
 
 lazy val root = (project in file(".")).
-  aggregate(twitterProducer, common)
+  aggregate(twitterProducer, common, slides)
 
 val commonSettings =  Seq(
       organization := "co.enear",
-  scalaVersion in ThisBuild := "2.11.8",
-  cancelable in Global := true,
+  scalaVersion := "2.11.8",
+  //cancelable in Global := true,
       version      := "0.1.0-SNAPSHOT",
   resolvers ++= Seq(
     Resolver.sonatypeRepo("snapshots"),
@@ -65,10 +65,16 @@ lazy val twitterProducer = (project in file("twitter-producer")).
 
 lazy val slides = (project in file("slides")).
   settings(commonSettings:_*).
+  settings(
+    name := "slides",
+    libraryDependencies += revealjs
+  ).
   settings(tutSettings:_*).
   settings(slidesSettings:_*).
   settings(
     slidesSourceFile := tutTargetDirectory.value / "slides.md",
     slidesHtml := (slidesHtml.dependsOn(tut)).value
   ).
-dependsOn(common)
+  dependsOn(common).
+  enablePlugins(SbtWeb)
+
