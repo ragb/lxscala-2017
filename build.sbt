@@ -1,6 +1,7 @@
 import Dependencies._
 import Slides._
 
+
 lazy val root = (project in file(".")).
   aggregate(twitterProducer, common, slides)
 
@@ -63,7 +64,10 @@ lazy val twitterProducer = (project in file("twitter-producer")).
   ).
   dependsOn(common)
 
+lazy val copyWebResources = TaskKey[Unit]("copy web resources", "copy web resources to slides html")
+
 lazy val slides = (project in file("slides")).
+  enablePlugins(SbtWeb).
   settings(commonSettings:_*).
   settings(
     name := "slides",
@@ -73,8 +77,14 @@ lazy val slides = (project in file("slides")).
   settings(slidesSettings:_*).
   settings(
     slidesSourceFile := tutTargetDirectory.value / "slides.md",
-    slidesHtml := (slidesHtml.dependsOn(tut)).value
+    slidesHtml := (slidesHtml.dependsOn(tut, copyWebResources)).value,
+    copyWebResources := {
+      val webDir = WebKeys.stage.value
+      val webResources = (webDir ** "*").get pair Path.rebase(webDir, slidesTargetDirectory.value)
+      IO.copy(webResources)
+      ()
+    }
   ).
-  dependsOn(common).
-  enablePlugins(SbtWeb)
+  dependsOn(common)
+
 
