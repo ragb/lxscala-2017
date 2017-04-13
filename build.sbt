@@ -1,7 +1,6 @@
 import Dependencies._
 import Slides._
 
-
 lazy val root = (project in file(".")).
   aggregate(twitterProducer, common, slides)
 
@@ -84,6 +83,24 @@ lazy val slides = (project in file("slides")).
       IO.copy(webResources)
       ()
     }
+  ).
+  dependsOn(common)
+
+lazy val akkaStreamsFeatures = (project in file("akka-streams-features")).
+  settings(commonSettings:_*).
+  settings(
+    name := "akka-streams-features",
+    libraryDependencies ++= Seq(
+      akkaStreams,
+      circeCore,
+      circeParser,
+      circeGeneric,
+      logback,
+      scalaLogging,
+      pureconfig,
+      cats,
+      reactiveKafka
+    )
   ).
   dependsOn(common)
 

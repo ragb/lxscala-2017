@@ -9,6 +9,9 @@ object Dependencies {
   lazy val fs2core = "co.fs2" %% "fs2-core" % fs2version
   lazy val jawnFs2 = "org.http4s" %% "jawn-fs2" % jawnFs2version
   lazy val fs2Kafka = "co.enear" %% "fs2-kafka" % fs2KafkaVersion
+  lazy val cats = "org.typelevel" %% "cats" % catsVersion
+  lazy val akkaStreams = "com.typesafe.akka" %% "akka-stream" % "2.4.17"
+  lazy val reactiveKafka = "com.typesafe.akka" %% "akka-stream-kafka" % "0.14"
 
   // Circe
   lazy val Seq(circeCore, circeParser, circeGeneric) = Seq("circe-core", "circe-parser", "circe-generic") map(lib => "io.circe" %% lib % circeVersion)
@@ -25,7 +28,7 @@ object Dependencies {
 lazy val macroParadise = compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 // Library versions
-    val logbackVersion = "1.2.1"
+  val logbackVersion = "1.2.1"
   val scalaLoggingVersion = "3.5.0"
   val http4sVersion = "0.17.0-SNAPSHOT"
   val circeVersion = "0.7.0"
@@ -36,6 +39,8 @@ lazy val macroParadise = compilerPlugin("org.scalamacros" % "paradise" % "2.1.0"
   val grafterVersion = "1.4.8"
   val fs2KafkaVersion = "0.0.1"
   val revealjsVersion = "3.1.0"
+  val catsVersion = "0.9.0"
+
 
 // Resolvers
   val rossabackerBintray = "bintray/rossabaker" at "http://dl.bintray.com/rossabaker/maven"
