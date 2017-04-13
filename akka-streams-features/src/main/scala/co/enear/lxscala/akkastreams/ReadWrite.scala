@@ -1,25 +1,34 @@
 package co.enear.lxscala.akkastreams
 
 import akka.actor.ActorSystem
-import akka.kafka.ProducerSettings
+import akka.kafka.{ ConsumerSettings, ProducerSettings, Subscriptions }
 import akka.stream.ActorMaterializer
-import akka.stream.scaladsl._
 import akka.kafka.scaladsl._
 import org.apache.kafka.clients.producer.ProducerRecord
-import org.apache.kafka.common.serialization.{ ByteArraySerializer, StringSerializer }
+import org.apache.kafka.common.TopicPartition
+import org.apache.kafka.common.serialization.{ StringDeserializer, StringSerializer }
+import io.circe.Json
+import io.circe.parser._
+import io.circe.generic.semiauto._
+import cats.implicits._
 
 object ReadWrite extends App {
   implicit val system = ActorSystem("System")
 
   implicit val materializer = ActorMaterializer()
 
-  val producerSettings = ProducerSettings(system, new ByteArraySerializer, new StringSerializer)
+  case class Tweett(id: Int, retweet_count: Long)
+  implicit val tweetDecoder = deriveDecoder[Tweett]
 
-  Source(1 to 100)
-    .map(_.toString)
-    .map { elem =>
-      new ProducerRecord[Array[Byte], String]("topic1", elem)
-    }
-    .runWith(Producer.plainSink(producerSettings))
+  val producerSettings = ProducerSettings(system, new StringSerializer, new StringSerializer)
+  val consumerSettings = ConsumerSettings(system, new StringDeserializer, new StringDeserializer)
+
+  Consumer.plainSource(consumerSettings, Subscriptions.assignmentWithOffset(
+    new TopicPartition("topic1", 0), 0
+  )).map { record =>
+    parse(record.value).getOrElse(Json.Null).as[Tweett].getOrElse(???)
+  }.map { tweet =>
+    new ProducerRecord[String, String]("topic1", tweet.retweet_count.toString)
+  }.runWith(Producer.plainSink(producerSettings))
 
 }
