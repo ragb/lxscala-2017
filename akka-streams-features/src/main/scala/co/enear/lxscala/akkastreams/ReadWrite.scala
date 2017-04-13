@@ -2,7 +2,7 @@ package co.enear.lxscala.akkastreams
 
 import akka.actor.ActorSystem
 import akka.kafka.{ ConsumerSettings, ProducerSettings, Subscriptions }
-import akka.stream.ActorMaterializer
+import akka.stream.{ ActorAttributes, ActorMaterializer, Supervision }
 import akka.kafka.scaladsl._
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.TopicPartition
@@ -11,9 +11,11 @@ import io.circe.Json
 import io.circe.parser._
 import io.circe.generic.semiauto._
 import cats.implicits._
+import co.enear.lxscala.twitter.exceptions.ParsingException
 
 object ReadWrite extends App {
   implicit val system = ActorSystem("System")
+  implicit val dispatcher = system.dispatcher
 
   implicit val materializer = ActorMaterializer()
 
@@ -26,9 +28,13 @@ object ReadWrite extends App {
   Consumer.plainSource(consumerSettings, Subscriptions.assignmentWithOffset(
     new TopicPartition("topic1", 0), 0
   )).map { record =>
-    parse(record.value).getOrElse(Json.Null).as[Tweett].getOrElse(???)
+    parse(record.value)
+      .getOrElse(Json.Null).as[Tweett]
+      .fold(decodingFailure => throw ParsingException(decodingFailure.message), tweet => tweet)
   }.map { tweet =>
     new ProducerRecord[String, String]("topic1", tweet.retweet_count.toString)
-  }.runWith(Producer.plainSink(producerSettings))
+  }.withAttributes(
+    ActorAttributes.supervisionStrategy(Supervision.resumingDecider)
+  ).runWith(Producer.plainSink(producerSettings))
 
 }
