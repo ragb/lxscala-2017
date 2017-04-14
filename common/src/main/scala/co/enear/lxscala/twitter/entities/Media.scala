@@ -1,6 +1,8 @@
 package co.enear.lxscala.twitter.entities
 
-case class Media(
+import io.circe.generic.JsonCodec
+
+@JsonCodec case class Media(
   display_url: String,
   expanded_url: String,
   id: Long,

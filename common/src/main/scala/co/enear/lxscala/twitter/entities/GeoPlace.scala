@@ -1,6 +1,8 @@
 package co.enear.lxscala.twitter.entities
 
-case class GeoPlace(
+import io.circe.generic.JsonCodec
+
+@JsonCodec case class GeoPlace(
   attributes: Map[String, String],
   bounding_box: Area,
   country: String,

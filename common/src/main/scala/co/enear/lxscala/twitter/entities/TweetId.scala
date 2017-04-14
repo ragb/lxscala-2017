@@ -1,3 +1,5 @@
 package co.enear.lxscala.twitter.entities
 
-case class TweetId(id: Long, id_str: String)
+import io.circe.generic.JsonCodec
+
+@JsonCodec case class TweetId(id: Long, id_str: String)

@@ -2,7 +2,10 @@ package co.enear.lxscala.twitter.entities
 
 import java.util.Date
 
-case class User(
+import io.circe.generic.JsonCodec
+import co.enear.lxscala.twitter.encoding.Codec._
+
+@JsonCodec case class User(
   blocked_by: Boolean = false,
   blocking: Boolean = false,
   contributors_enabled: Boolean = false,

@@ -1,9 +1,11 @@
 package co.enear.lxscala.twitter.entities
 
+import io.circe.generic.JsonCodec
+
 // TODO - conversion to clean this representation? see url vs urls
 // unfortunately Twitter is not consistent when representing this entity...
 
-case class Entities(
+@JsonCodec case class Entities(
   hashtags: Seq[HashTag] = Seq.empty,
   media: Seq[Media] = Seq.empty,
   url: Option[Urls] = None,
@@ -12,7 +14,7 @@ case class Entities(
   description: Option[Urls] = None
 )
 
-case class Urls(urls: Seq[UrlDetails] = Seq.empty)
+@JsonCodec case class Urls(urls: Seq[UrlDetails] = Seq.empty)
 
-case class UrlDetails(url: String, expanded_url: String, display_url: String, indices: Seq[Int])
+@JsonCodec case class UrlDetails(url: String, expanded_url: String, display_url: String, indices: Seq[Int])
 

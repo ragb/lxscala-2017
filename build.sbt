@@ -40,7 +40,16 @@ val commonSettings =  Seq(
 
 lazy val common = (project in file("common")).
 settings(commonSettings:_*).
-settings(name := "lxscala-common")
+settings(
+  name := "lxscala-common",
+  libraryDependencies ++= Seq(
+    circeCore,
+    circeGeneric,
+    circeParser,
+    macroParadise
+  )
+
+)
 
 lazy val twitterProducer = (project in file("twitter-producer")).
   settings(commonSettings:_*).

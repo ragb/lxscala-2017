@@ -1,6 +1,8 @@
 package co.enear.lxscala.twitter.entities
 
-case class UserMention(
+import io.circe.generic.JsonCodec
+
+@JsonCodec case class UserMention(
   id: Long,
   id_str: String,
   indices: Seq[Int] = Seq.empty,

@@ -1,8 +1,10 @@
 package co.enear.lxscala.twitter.entities
 
-case class StatusSearch(statuses: List[Tweet], search_metadata: SearchMetadata)
+import io.circe.generic.JsonCodec
 
-case class SearchMetadata(
+@JsonCodec case class StatusSearch(statuses: List[Tweet], search_metadata: SearchMetadata)
+
+@JsonCodec case class SearchMetadata(
   completed_in: Double,
   max_id: Long,
   max_id_str: String,
@@ -14,4 +16,4 @@ case class SearchMetadata(
   since_id_str: String
 )
 
-case class StatusMetadata(iso_language_code: String, result_type: String)
+@JsonCodec case class StatusMetadata(iso_language_code: String, result_type: String)

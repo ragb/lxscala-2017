@@ -1,3 +1,5 @@
 package co.enear.lxscala.twitter.entities
 
-case class Size(h: Int, resize: String, w: Int)
+import io.circe.generic.JsonCodec
+
+@JsonCodec case class Size(h: Int, resize: String, w: Int)
