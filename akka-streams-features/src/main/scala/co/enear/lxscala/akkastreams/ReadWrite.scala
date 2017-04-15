@@ -11,7 +11,7 @@ import io.circe.Json
 import io.circe.parser._
 import cats.implicits._
 import co.enear.lxscala.twitter.entities.Tweet
-import co.enear.lxscala.twitter.exceptions.ParsingException
+import co.enear.lxscala.twitter.exceptions.Exceptions._
 
 object ReadWrite extends App {
   implicit val system = ActorSystem("System")
