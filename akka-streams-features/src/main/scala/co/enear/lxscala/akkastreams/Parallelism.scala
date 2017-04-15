@@ -9,10 +9,10 @@ import akka.kafka.{ ConsumerSettings, ProducerMessage, ProducerSettings, Subscri
 import akka.stream.{ ActorMaterializer, ActorMaterializerSettings, Supervision }
 import akka.stream.scaladsl.{ Flow, Sink }
 import org.apache.kafka.common.serialization.{ StringDeserializer, StringSerializer }
-import io.circe.parser._
 import io.circe.syntax._
 import cats.implicits._
-import co.enear.lxscala.twitter.entities.{ Tweet, UserCount }
+import co.enear.lxscala.twitter.entities.UserCount
+import co.enear.lxscala.twitter.util.TweetUtils._
 import co.enear.lxscala.twitter.exceptions.Exceptions._
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.Encoder
@@ -21,8 +21,6 @@ import org.apache.kafka.clients.producer.ProducerRecord
 import scala.concurrent.Future
 
 object Parallelism extends App with LazyLogging {
-
-  final val noUserInTweetErrorMsg: (String) => String = { tweetId => s"Tweet with id $tweetId has no user and will be skipped" }
 
   val decider: Supervision.Decider = (t: Throwable) => t match {
     case ParsingException(msg) =>
@@ -63,11 +61,6 @@ object Parallelism extends App with LazyLogging {
     )
   }
 
-  def parseTweet[QueueMessage](message: QueueMessage, extractJS: QueueMessage => String): Tweet = {
-    val tweetJS = parse(extractJS(message)).valueOr(parsingError => throw ParsingException(parsingError.message))
-    tweetJS.as[Tweet].valueOr(parsingError => throw ParsingException(parsingError.message))
-  }
-
   def streamWithPartitionPerSource[FlowOut, KafkaMessage](
     consumerTopic: String,
     producerTopic: String,
@@ -103,7 +96,9 @@ object Parallelism extends App with LazyLogging {
 
   val tweetsPerUserWithCommitOffset: Flow[CommitMessage, AggregatedMessage, NotUsed] = Flow[CommitMessage]
     .map { message =>
-      (message, parseTweet[CommitMessage](message, _.record.value()).user.getOrElse(???).id)
+      val tweet = parseTweet[CommitMessage](message, _.record.value())
+      val userId = tweet.user.map(_.id).getOrElse(throw TweetWithoutUserException(noUserInTweetErrorMsg(tweet.id_str)))
+      (message, userId)
     }
     .groupBy(1000000, _._2)
     .map { case (message, userId) => (userId, (1, Seq(message))) }
