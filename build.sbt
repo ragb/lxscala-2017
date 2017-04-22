@@ -2,7 +2,7 @@ import Dependencies._
 import Slides._
 
 lazy val root = (project in file(".")).
-  aggregate(twitterProducer, common, slides)
+  aggregate(twitterProducer, common, slides, akkaStreamsFeatures)
 
 val commonSettings =  Seq(
       organization := "co.enear",

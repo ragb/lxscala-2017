@@ -10,8 +10,8 @@ object Dependencies {
   lazy val jawnFs2 = "org.http4s" %% "jawn-fs2" % jawnFs2version
   lazy val fs2Kafka = "co.enear" %% "fs2-kafka" % fs2KafkaVersion
   lazy val cats = "org.typelevel" %% "cats" % catsVersion
-  lazy val akkaStreams = "com.typesafe.akka" %% "akka-stream" % "2.4.17"
-  lazy val reactiveKafka = "com.typesafe.akka" %% "akka-stream-kafka" % "0.14"
+  lazy val akkaStreams = "com.typesafe.akka" %% "akka-stream" % akkaStreamsVersion
+  lazy val reactiveKafka = "com.typesafe.akka" %% "akka-stream-kafka" % reactiveKafkaVersion
 
   // Circe
   lazy val Seq(circeCore, circeParser, circeGeneric) = Seq("circe-core", "circe-parser", "circe-generic") map(lib => "io.circe" %% lib % circeVersion)
@@ -37,9 +37,11 @@ lazy val macroParadise = compilerPlugin("org.scalamacros" % "paradise" % "2.1.0"
   val specs2Version = "3.8.9"
   val pureconfigVersion = "0.6.0"
   val grafterVersion = "1.4.8"
-  val fs2KafkaVersion = "0.0.2"
+  val fs2KafkaVersion = "0.0.6"
   val revealjsVersion = "3.1.0"
   val catsVersion = "0.9.0"
+  val akkaStreamsVersion = "2.4.17"
+  val reactiveKafkaVersion = "0.14"
 
 
 // Resolvers
