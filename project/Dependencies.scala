@@ -8,7 +8,7 @@ object Dependencies {
   lazy val http4sDsl = "org.http4s" %% "http4s-dsl" % http4sVersion
   lazy val fs2core = "co.fs2" %% "fs2-core" % fs2version
   lazy val jawnFs2 = "org.http4s" %% "jawn-fs2" % jawnFs2version
-  lazy val fs2Kafka = "co.enear" %% "fs2-kafka" % fs2KafkaVersion
+  lazy val fs2Kafka = "co.enear.fs2" %% "fs2-kafka" % fs2KafkaVersion
   lazy val cats = "org.typelevel" %% "cats" % catsVersion
   lazy val akkaStreams = "com.typesafe.akka" %% "akka-stream" % akkaStreamsVersion
   lazy val reactiveKafka = "com.typesafe.akka" %% "akka-stream-kafka" % reactiveKafkaVersion

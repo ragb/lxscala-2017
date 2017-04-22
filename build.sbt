@@ -6,7 +6,7 @@ lazy val root = (project in file(".")).
 
 val commonSettings =  Seq(
       organization := "co.enear",
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.11.11",
   //cancelable in Global := true,
       version      := "0.1.0-SNAPSHOT",
   resolvers ++= Seq(
@@ -67,8 +67,10 @@ lazy val twitterProducer = (project in file("twitter-producer")).
       scalaLogging,
       pureconfig,
       grafter,
+      fs2Kafka,
       macroParadise
     )
+
   ).
   dependsOn(common)
 
