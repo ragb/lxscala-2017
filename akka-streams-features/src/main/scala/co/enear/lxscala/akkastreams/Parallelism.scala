@@ -3,20 +3,16 @@ package co.enear.lxscala.akkastreams
 import akka.{ Done, NotUsed }
 import akka.actor.ActorSystem
 import akka.kafka.ConsumerMessage.{ CommittableMessage, CommittableOffset }
-import akka.kafka.ProducerMessage.Message
 import akka.kafka.scaladsl.{ Consumer, Producer }
-import akka.kafka.{ ConsumerSettings, ProducerMessage, ProducerSettings, Subscriptions }
+import akka.kafka.{ ConsumerSettings, ProducerSettings, Subscriptions }
 import akka.stream.{ ActorMaterializer, ActorMaterializerSettings, Supervision }
 import akka.stream.scaladsl.{ Flow, Sink }
 import org.apache.kafka.common.serialization.{ StringDeserializer, StringSerializer }
-import io.circe.syntax._
 import cats.implicits._
 import co.enear.lxscala.twitter.entities.UserCount
 import co.enear.lxscala.twitter.util.TweetUtils._
 import co.enear.lxscala.twitter.exceptions.Exceptions._
 import com.typesafe.scalalogging.LazyLogging
-import io.circe.Encoder
-import org.apache.kafka.clients.producer.ProducerRecord
 
 import scala.concurrent.Future
 
@@ -45,21 +41,6 @@ object Parallelism extends App with LazyLogging {
   type CommitMessage = CommittableMessage[String, String]
   type UserAggregation = (Long, (Int, Seq[CommitMessage]))
   type AggregatedMessage = (CommittableOffset, UserCount)
-
-  def createProducerRecord[EncodableEntity](entity: EncodableEntity, topic: String)(implicit encoder: Encoder[EncodableEntity]) = {
-    new ProducerRecord[String, String](topic, entity.asJson.toString)
-  }
-
-  def createProducerMessageWithOffset[EncodableEntity](
-    offset: CommittableOffset,
-    entity: EncodableEntity,
-    topic: String
-  )(implicit encoder: Encoder[EncodableEntity]): Message[String, String, CommittableOffset] = {
-    ProducerMessage.Message(
-      createProducerRecord(entity, topic),
-      offset
-    )
-  }
 
   def streamWithPartitionPerSource[FlowOut, KafkaMessage](
     consumerTopic: String,
@@ -136,7 +117,9 @@ object Parallelism extends App with LazyLogging {
       "topic1",
       "topic2",
       tweetsPerUserWithCommitOffset,
-      { (producerTopic: String, tweetsPerUser: AggregatedMessage) => createProducerMessageWithOffset(tweetsPerUser._1, tweetsPerUser._2, producerTopic) },
+      { (producerTopic: String, tweetsPerUser: AggregatedMessage) =>
+        KafkaUtils.createProducerMessageWithOffset(tweetsPerUser._1, tweetsPerUser._2, producerTopic)
+      },
       Producer.commitableSink(producerSettings)
     )
 
@@ -145,7 +128,9 @@ object Parallelism extends App with LazyLogging {
       "topic1",
       "topic2",
       tweetsPerUserWithCommitOffset,
-      { (producerTopic: String, tweetsPerUser: AggregatedMessage) => createProducerMessageWithOffset(tweetsPerUser._1, tweetsPerUser._2, producerTopic) },
+      { (producerTopic: String, tweetsPerUser: AggregatedMessage) =>
+        KafkaUtils.createProducerMessageWithOffset(tweetsPerUser._1, tweetsPerUser._2, producerTopic)
+      },
       Producer.commitableSink(producerSettings)
     )
 
@@ -154,7 +139,7 @@ object Parallelism extends App with LazyLogging {
       "topic1",
       "topic2",
       distinctUsersWithCommitOffset,
-      { (producerTopic: String, userCount: Int) => createProducerRecord(userCount, producerTopic) },
+      { (producerTopic: String, userCount: Int) => KafkaUtils.createProducerRecord(userCount, producerTopic) },
       Producer.plainSink(producerSettings)
     )
 
@@ -163,7 +148,7 @@ object Parallelism extends App with LazyLogging {
       "topic1",
       "topic2",
       distinctUsersWithCommitOffset,
-      { (producerTopic: String, userCount: Int) => createProducerRecord(userCount, producerTopic) },
+      { (producerTopic: String, userCount: Int) => KafkaUtils.createProducerRecord(userCount, producerTopic) },
       Producer.plainSink(producerSettings)
     )
 
