@@ -2,12 +2,12 @@ package co.enear.lxscala.twitter.entities
 
 import java.util.Date
 
-import io.circe.generic.JsonCodec
+import io.circe.generic.extras.ConfiguredJsonCodec
 import co.enear.lxscala.twitter.encoding.Codec._
 
-@JsonCodec case class User(
-  blocked_by: Boolean = false,
-  blocking: Boolean = false,
+@ConfiguredJsonCodec case class User(
+  blocked_by: Option[Boolean] = None,
+  blocking: Option[Boolean] = None,
   contributors_enabled: Boolean = false,
   created_at: Date,
   default_profile: Boolean = false,

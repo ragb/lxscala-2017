@@ -14,7 +14,7 @@ object Dependencies {
   lazy val reactiveKafka = "com.typesafe.akka" %% "akka-stream-kafka" % reactiveKafkaVersion
 
   // Circe
-  lazy val Seq(circeCore, circeParser, circeGeneric) = Seq("circe-core", "circe-parser", "circe-generic") map(lib => "io.circe" %% lib % circeVersion)
+  lazy val Seq(circeCore, circeParser, circeGeneric, circeGenericExtras) = Seq("circe-core", "circe-parser", "circe-generic", "circe-generic-extras") map(lib => "io.circe" %% lib % circeVersion)
   lazy val pureconfig = "com.github.melrief" %% "pureconfig" % pureconfigVersion
   lazy val grafter = "org.zalando" %% "grafter" % grafterVersion
 

@@ -6,7 +6,7 @@ lazy val root = (project in file(".")).
 
 val commonSettings =  Seq(
       organization := "co.enear",
-  scalaVersion := "2.11.11",
+  scalaVersion in ThisBuild := "2.12.2",
   //cancelable in Global := true,
       version      := "0.1.0-SNAPSHOT",
   resolvers ++= Seq(
@@ -45,6 +45,7 @@ settings(
   libraryDependencies ++= Seq(
     circeCore,
     circeGeneric,
+    circeGenericExtras,
     circeParser,
     macroParadise
   )

@@ -2,10 +2,10 @@ package co.enear.lxscala.twitter.entities
 
 import java.util.Date
 
-import io.circe.generic.JsonCodec
+import io.circe.generic.extras.ConfiguredJsonCodec
 import co.enear.lxscala.twitter.encoding.Codec._
 
-@JsonCodec case class Tweet(
+@ConfiguredJsonCodec case class Tweet(
   contributors: Seq[Contributor] = Seq.empty,
   coordinates: Option[Coordinates] = None,
   created_at: Date,

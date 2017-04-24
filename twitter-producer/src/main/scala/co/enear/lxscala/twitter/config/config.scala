@@ -15,7 +15,16 @@ final case class TwitterConfig(
   auth: TwitterAuthConfig
 )
 
+final case class KafkaProducerConfig(
+  topicPrefix: String,
+  tweetsTopic: String,
+  bootstrapServers: String
+)
+
 @readers
-final case class ApplicationConfig(twitter: TwitterConfig)
+final case class ApplicationConfig(
+  twitter: TwitterConfig,
+  kafka: KafkaProducerConfig
+)
 
 object ApplicationConfig extends GenericReader
