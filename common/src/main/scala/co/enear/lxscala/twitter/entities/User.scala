@@ -6,8 +6,8 @@ import io.circe.generic.extras.ConfiguredJsonCodec
 import co.enear.lxscala.twitter.encoding.Codec._
 
 @ConfiguredJsonCodec case class User(
-  blocked_by: Option[Boolean] = None,
-  blocking: Option[Boolean] = None,
+  blocked_by: Boolean = false,
+  blocking: Boolean = false,
   contributors_enabled: Boolean = false,
   created_at: Date,
   default_profile: Boolean = false,
@@ -37,8 +37,8 @@ import co.enear.lxscala.twitter.encoding.Codec._
   profile_background_image_url_https: String,
   profile_background_tile: Boolean = false,
   profile_banner_url: Option[String] = None,
-  profile_image_url: ProfileImage,
-  profile_image_url_https: ProfileImage,
+  //profile_image_url: ProfileImage,
+  //profile_image_url_https: ProfileImage,
   profile_link_color: String,
   profile_sidebar_border_color: String,
   profile_sidebar_fill_color: String,

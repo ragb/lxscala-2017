@@ -16,6 +16,7 @@ final case class Application(twitterClient: TwitterStreamingClient, producer: Tw
     .observe(logJsonErrorsSink[Tweet])
     .collect { case Right(v) => v }
     .to(producer.tweetSink)
+    .onError { t => println(t); Stream.fail(t) }
     .run
 
   def logJsonErrorsSink[T]: Sink[Task, Decoder.Result[T]] = _.collect {

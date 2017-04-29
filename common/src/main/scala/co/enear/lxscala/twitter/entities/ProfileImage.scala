@@ -1,8 +1,8 @@
 package co.enear.lxscala.twitter.entities
 
-import io.circe.generic.JsonCodec
+import io.circe.generic.extras.ConfiguredJsonCodec
 
-@JsonCodec case class ProfileImage(mini: String, normal: String, bigger: String, default: String)
+@ConfiguredJsonCodec case class ProfileImage(mini: String, normal: String, bigger: String, default: String)
 
 object ProfileImage {
 
