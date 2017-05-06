@@ -23,15 +23,13 @@ object ReadWrite extends App {
     .withBootstrapServers(bootstrapServers)
 
   // stream definition
-  val stream = Producer[Task, String, String, Unit](producerSettings) { producer =>
-    Consumer[Task, String, String](consumerSettings)
-      .simpleStream
-      .plainMessages(subscription)
-      .map(msg => parseTweet[ConsumerRecord[String, String]](msg, _.value))
-      .map(_.retweet_count)
-      .map(count => new ProducerRecord[String, String]("topic2", "key", count.toString))
-      .to(producer.sendSink)
-  }
+  val stream = Consumer[Task, String, String](consumerSettings)
+    .simpleStream
+    .plainMessages(subscription)
+    .map(msg => parseTweet[ConsumerRecord[String, String]](msg, _.value))
+    .map(_.retweet_count)
+    .map(count => new ProducerRecord[String, String]("topic2", "key", count.toString))
+    .to(Producer[Task, String, String](producerSettings).sendAsync)
 
   // run at end of universe
   stream.run.unsafeRun()
