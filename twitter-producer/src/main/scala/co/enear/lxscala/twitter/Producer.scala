@@ -26,14 +26,13 @@ final case class TweetProducer(
   def tweetSink(implicit strategy: Strategy): Sink[Task, Tweet] = { s: Stream[Task, Tweet] =>
     val settings = ProducerSettings[String, String]()
       .withBootstrapServers(producerConfig.bootstrapServers)
-    KafkaProducer[Task, String, String, Unit](settings) { producer =>
-      s.map(tweet => (tweet.user.get.screen_name, tweet.asJson))
-        .observe[Task, (String, Json)](_.map(_._2).to(logJsonSink))
-        .map { case (key, json) => ProducerMessage[String, String, Unit](new ProducerRecord(s"${producerConfig.topicPrefix}${producerConfig.tweetsTopic}", key, json.noSpaces), ()) }
-        .map { e => println(e); e }
-        .through(producer.send)
-        .drain
+    val producer = KafkaProducer[Task, String, String](settings)
+    s.map(tweet => (tweet.user.get.screen_name, tweet.asJson))
+      .observe[Task, (String, Json)](_.map(_._2).to(logJsonSink))
+      .map { case (key, json) => ProducerMessage[String, String, Unit](new ProducerRecord(s"${producerConfig.topicPrefix}${producerConfig.tweetsTopic}", key, json.noSpaces), ()) }
+      .map { e => println(e); e }
+      .through(producer.send)
+      .drain
 
-    }
   }
 }
