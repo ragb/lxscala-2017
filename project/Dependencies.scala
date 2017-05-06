@@ -30,7 +30,7 @@ lazy val macroParadise = compilerPlugin("org.scalamacros" % "paradise" % "2.1.0"
 // Library versions
   val logbackVersion = "1.2.1"
   val scalaLoggingVersion = "3.5.0"
-  val http4sVersion = "0.17.0-M1"
+  val http4sVersion = "0.17.0-M2"
   val circeVersion = "0.7.0"
   val fs2version = "0.9.5"
   val jawnFs2version = "0.10.1"

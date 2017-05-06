@@ -128,7 +128,9 @@ lazy val fs2Features  = (project in file("fs2-features")).
       circeCore,
       circeParser,
       circeParser,
-      cats
+      cats,
+      logback,
+      scalaLogging
     )
   ).
   dependsOn(common)
