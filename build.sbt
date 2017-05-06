@@ -2,7 +2,7 @@ import Dependencies._
 import Slides._
 
 lazy val root = (project in file(".")).
-  aggregate(twitterProducer, common, slides, akkaStreamsFeatures)
+  aggregate(twitterProducer, common, slides, akkaStreamsFeatures, fs2Features)
 
 val commonSettings =  Seq(
       organization := "co.enear",
@@ -23,7 +23,8 @@ val commonSettings =  Seq(
   "-feature",                
   "-language:existentials",
   "-language:higherKinds",
-  "-language:implicitConversions",
+        "-language:implicitConversions",
+        "-language:postfixOps",
   "-unchecked",
   "-Xfatal-warnings",       
   "-Xlint",
@@ -117,3 +118,17 @@ lazy val akkaStreamsFeatures = (project in file("akka-streams-features")).
   dependsOn(common)
 
 
+lazy val fs2Features  = (project in file("fs2-features")).
+  settings(commonSettings:_*).
+  settings(
+    name := "fs2-features",
+    libraryDependencies ++= Seq(
+      fs2core,
+      fs2Kafka,
+      circeCore,
+      circeParser,
+      circeParser,
+      cats
+    )
+  ).
+  dependsOn(common)
