@@ -1,91 +1,48 @@
-## Java API
-
-- Java API
-- Simple
-- But Java
-
-
-## Consumer
-
-- Fetches records from a Kafka cluster
-- Polling loop
 
 ## Initialization
+```scala
+val props = new Properties()
+props.put("bootstrap.servers", "localhost:9092")
+props.put("group.id", "consumer-tutorial")
+props.put("key.deserializer", StringDeserializer.class.getName())
+props.put("value.deserializer", StringDeserializer.class.getName())
+consumer = new KafkaConsumer[String, String](props)
 
-```java
-Properties props = new Properties();
-props.put("bootstrap.servers", "localhost:9092");
-props.put("group.id", "consumer-tutorial");
-props.put("key.deserializer", StringDeserializer.class.getName());
-props.put("value.deserializer", StringDeserializer.class.getName());
-KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
+consumer.subscribe(List("foo", "bar").asJava)
 ```
 
-## Initialization
+### Notes
 
-- Property based configuration
-- Reflection
-
-
-## Subscription
+- property based configuration
+- reflection
+- Java API (even with scala help)
 
 
-```java
-consumer.subscribe(Arrays.asList(?foo?, ?bar?));
-```
 
 ## Polling loop
 
 In one thread:
 
-```java
+```scala
 try {
   while (true) {
-    ConsumerRecords<String, String> records = consumer.poll(Long.MAX_VALUE);
-    for (ConsumerRecord<String, String> record : records)
-      System.out.println(record.offset() + ?: ? + record.value());
-  }
-} catch (WakeupException e) {
-  // ignore for shutdown
+    val records = consumer.poll(Long.MAX_VALUE);
+    records.iterator.asScala foreach {record => println(record.value)}
+} catch {
+  case e: WakeupException => // ignore for shutdown
 } finally {
-  consumer.close();
+  consumer.close()
 }
 ```
 
-## Polling loop
-
 In another thread, to shutdown:
 
-```java
-consumer.wakeup();
+```scala
+consumer.wakeup()
 ```
 
+### Notes
 
-## Points
-
-- Single threaded access
+- Exceptions as control flow
 - Blocking API
-- `poll`takes care of heartbeats, commits,...
-- Exceptions as control flow :(
-
-
-## Producer
-
-- Produces records to the kafka cluster
-
-## API
-
-- Initialization similar to consumer
-- Can be used from various threads
-
-## API
-
-```java
-public Future<RecordMetadata> send(ProducerRecord<K,V> record,
-                          Callback callback)
-```
-
-- Adds records to send buffer
-- Assynchronous confirmation (if needed)
-
-
+- Single threaded access (external synchronization)
