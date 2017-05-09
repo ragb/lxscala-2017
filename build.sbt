@@ -124,6 +124,7 @@ lazy val fs2Features  = (project in file("fs2-features")).
     name := "fs2-features",
     libraryDependencies ++= Seq(
       fs2core,
+      fs2IO,
       fs2Kafka,
       circeCore,
       circeParser,
