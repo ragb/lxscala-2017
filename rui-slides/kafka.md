@@ -28,6 +28,7 @@ try {
   while (true) {
     val records = consumer.poll(Long.MAX_VALUE);
     records.iterator.asScala foreach {record => println(record.value)}
+    
 } catch {
   case e: WakeupException => // ignore for shutdown
 } finally {

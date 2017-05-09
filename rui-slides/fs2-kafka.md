@@ -63,3 +63,15 @@ Notify assigned partitions:
 openPartitionsQueue: Queue[F, (TopicPartition, Stream[F, ConsumerRecord[K, V]])]
 ```
 
+
+
+## Producer
+
+```scala
+trait Producer[F[_], K, V] {
+  //...
+  def send[P](implicit F: Async[F]): Pipe[F, ProducerMessage[K, V, P], ProducerMetadata[P]]
+  def sendAsync: Sink[F, ProducerRecord[K, V]]
+}
+```
+

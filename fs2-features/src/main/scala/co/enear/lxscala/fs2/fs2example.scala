@@ -15,4 +15,9 @@ object Fs2Example extends App {
   val addLineNumbersTask = addLineNumbersStream.run
   addLineNumbersTask.unsafeRun()
 
+  val simpleStream = Stream[Task, Int](1)
+    .map(_.toString)
+    .runLast
+    .unsafeRun()
+
 }
